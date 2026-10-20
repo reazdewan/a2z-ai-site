@@ -14,6 +14,7 @@ src/
   worker.js           routes /api/* and serves the website
   subscribe.js        saves every signup into the database
   export.js           downloads your list as a CSV file
+  import.js           imports a CSV list (used by /admin/import.html)
 wrangler.jsonc        Worker settings, including the database connection (DB)
 schema.sql            database table (already created in your account)
 ```
@@ -47,6 +48,15 @@ change `"name"` in `wrangler.jsonc` to match, or the build will fail.
   `SELECT * FROM subscribers ORDER BY created_at DESC;`
 
 Columns: date, first name, last name, email, form, product, country, page.
+
+## Import an existing list
+
+1. Open `https://shop.a2zaidaily.com/admin/import.html` (private page, hidden from search engines).
+2. Choose a CSV with columns `Email`, `First Name`, `Last Name`, and optionally `timestamp`, `user_agent`.
+3. Enter your EXPORT_KEY password and click **Import**.
+
+Imported contacts are saved with no form or product label. Any email already in the database is skipped,
+so running the same file twice is safe.
 Import the CSV into any email tool (Kit, MailerLite, Brevo) when you want to send emails.
 
 ## Everyday changes

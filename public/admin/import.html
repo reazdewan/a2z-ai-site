@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Import subscribers | A2Z AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..900&display=swap">
+<link rel="stylesheet" href="/assets/styles.css">
+<style>
+.panel{max-width:640px;margin:24px auto 72px;padding:30px;display:flex;flex-direction:column;gap:18px}
+.panel h1{font-size:36px;font-weight:900}
+.panel label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.panel input[type=password],.panel input[type=file]{border:var(--bd);border-radius:14px;box-shadow:var(--sh-sm);padding:12px 14px;font:500 16px var(--font);background:#fff;letter-spacing:0;text-transform:none}
+.bar{height:16px;border:var(--bd);border-radius:999px;background:var(--cream);overflow:hidden}
+.bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.stats-line{font-weight:700}
+.log{font-size:14px;color:var(--muted);white-space:pre-line}
+.ok{color:#166534;font-weight:800}
+.err{color:#B42318;font-weight:800}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="logo" href="/" aria-label="A2Z AI home"><span class="mk">A<span>2</span>Z</span><span class="word">A<span>2</span>Z AI</span></a>
+  </div>
+</header>
+<main class="wrap">
+  <section class="box panel">
+    <span class="sticker dark">Private</span>
+    <h1>Import subscribers</h1>
+    <p class="muted">Upload a CSV with columns <b>Email</b>, <b>First Name</b>, <b>Last Name</b>, and optionally <b>timestamp</b> and <b>user_agent</b>. Emails already in the database are skipped, so running it twice is safe.</p>
+    <label>CSV file<input id="file" type="file" accept=".csv,text/csv"></label>
+    <label>Password (your EXPORT_KEY)<input id="key" type="password" autocomplete="current-password"></label>
+    <p class="stats-line" id="preview" hidden></p>
+    <button class="btn btn-wide" id="go" type="button" disabled><span class="btn-label">Import</span><span class="arr">›</span></button>
+    <div class="bar" aria-hidden="true"><span id="bar"></span></div>
+    <p class="log" id="log" role="status"></p>
+  </section>
+</main>
+<script>
+(function () {
+  'use strict';
+  var BATCH = 400;
+  var fileEl = document.getElementById('file');
+  var keyEl = document.getElementById('key');
+  var go = document.getElementById('go');
+  var bar = document.getElementById('bar');
+  var log = document.getElementById('log');
+  var preview = document.getElementById('preview');
+  var rows = [];
+
+  // CSV parser that handles quoted fields, commas and line breaks inside quotes.
+  function parseCSV(text) {
+    var out = [], row = [], field = '', i = 0, q = false;
+    text = text.replace(/^﻿/, '');
+    while (i < text.length) {
+      var c = text[i];
+      if (q) {
+        if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else { q = false; } }
+        else field += c;
+      } else if (c === '"') q = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); field = '';
+        if (row.length > 1 || row[0] !== '') out.push(row);
+        row = [];
+      } else field += c;
+      i++;
+    }
+    if (field !== '' || row.length) { row.push(field); out.push(row); }
+    return out;
+  }
+
+  function findCol(header, names) {
+    var h = header.map(function (x) { return x.trim().toLowerCase().replace(/[\s_-]+/g, ''); });
+    for (var n = 0; n < names.length; n++) { var idx = h.indexOf(names[n]); if (idx !== -1) return idx; }
+    return -1;
+  }
+
+  fileEl.addEventListener('change', function () {
+    var f = fileEl.files[0];
+    rows = []; preview.hidden = true; go.disabled = true; log.textContent = ''; bar.style.width = '0';
+    if (!f) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var data = parseCSV(reader.result);
+      if (data.length < 2) { log.innerHTML = '<span class="err">The file looks empty.</span>'; return; }
+      var head = data[0];
+      var cE = findCol(head, ['email', 'emailaddress']);
+      var cF = findCol(head, ['firstname', 'first']);
+      var cL = findCol(head, ['lastname', 'last']);
+      var cT = findCol(head, ['timestamp', 'createdat', 'date', 'subscribedat']);
+      var cU = findCol(head, ['useragent']);
+      if (cE === -1) { log.innerHTML = '<span class="err">No Email column found.</span>'; return; }
+      for (var r = 1; r < data.length; r++) {
+        var d = data[r];
+        if (!d[cE]) continue;
+        rows.push({
+          email: d[cE],
+          first_name: cF > -1 ? d[cF] : '',
+          last_name: cL > -1 ? d[cL] : '',
+          created_at: cT > -1 ? d[cT] : '',
+          user_agent: cU > -1 ? d[cU] : ''
+        });
+      }
+      preview.textContent = rows.length.toLocaleString() + ' rows found in ' + f.name + '.';
+      preview.hidden = false;
+      go.disabled = rows.length === 0;
+    };
+    reader.readAsText(f);
+  });
+
+  go.addEventListener('click', async function () {
+    var key = keyEl.value;
+    if (!key) { log.innerHTML = '<span class="err">Enter your password first.</span>'; keyEl.focus(); return; }
+    go.disabled = true; fileEl.disabled = true;
+    var totals = { inserted: 0, skipped: 0, invalid: 0 };
+    var batches = Math.ceil(rows.length / BATCH);
+    for (var b = 0; b < batches; b++) {
+      var chunk = rows.slice(b * BATCH, (b + 1) * BATCH);
+      var attempt = 0, res, body;
+      while (attempt < 3) {
+        attempt++;
+        try {
+          res = await fetch('/api/import', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: key, rows: chunk }) });
+          body = await res.json().catch(function () { return {}; });
+          if (res.ok && body.ok) break;
+          if (res.status === 401 || res.status === 400) break;
+        } catch (e) { body = { error: 'Network error' }; }
+        await new Promise(function (r) { setTimeout(r, 1500 * attempt); });
+      }
+      if (!res || !res.ok || !body.ok) {
+        log.innerHTML = '<span class="err">Stopped at batch ' + (b + 1) + ' of ' + batches + ': ' + ((body && body.error) || 'Unknown error') + '</span>\nRows before this batch are saved. Fix the problem and run the import again; saved emails are skipped.';
+        go.disabled = false; fileEl.disabled = false;
+        return;
+      }
+      totals.inserted += body.inserted; totals.skipped += body.skipped; totals.invalid += body.invalid;
+      bar.style.width = Math.round(((b + 1) / batches) * 100) + '%';
+      log.textContent = 'Batch ' + (b + 1) + ' of ' + batches + '. Added ' + totals.inserted.toLocaleString() + ' so far.';
+    }
+    log.innerHTML = '<span class="ok">Done.</span>\nAdded: ' + totals.inserted.toLocaleString() +
+      '\nAlready in database (skipped): ' + totals.skipped.toLocaleString() +
+      '\nInvalid emails (skipped): ' + totals.invalid.toLocaleString();
+    fileEl.disabled = false;
+  });
+})();
+</script>
+</body>
+</html>
