@@ -62,7 +62,7 @@ img{max-width:100%}
 /* Hero */
 .hero{display:flex;flex-wrap:wrap;align-items:center;gap:48px;padding-block:40px 56px}
 .hero-copy{flex:1 1 520px;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:24px}
-.hero h1{font-size:clamp(40px,5.6vw,68px);font-weight:900;max-width:12ch}
+.hero h1{font-size:clamp(40px,5.2vw,64px);font-weight:900;max-width:15ch}
 .hero h1 .hl{display:inline-block;background:var(--accent);color:#fff;border:var(--bd);border-radius:14px;box-shadow:var(--sh-sm);padding:0 .18em .04em;transform:rotate(-1.5deg)}
 .lede{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:52ch}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:100%;max-width:600px}
