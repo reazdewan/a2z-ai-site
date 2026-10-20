@@ -1,0 +1,20 @@
+{
+  // "name" must match the Worker name in the Cloudflare dashboard.
+  "name": "a2z-ai-site",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "a2z-ai-subscribers",
+      "database_id": "808b9938-af54-4102-b9f5-adf599ef07ca"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

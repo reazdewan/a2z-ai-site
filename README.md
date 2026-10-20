@@ -1,7 +1,7 @@
 # A2Z AI website
 
 Store home page for A2Z AI: free downloads, early access for premium products, and email collection.
-Hosting: **Cloudflare Pages** (free). Emails are saved in **Cloudflare D1** (free database).
+Hosting: **Cloudflare Workers** (free, deployed from GitHub). Emails are saved in **Cloudflare D1** (free database).
 
 ```
 public/               the website (what visitors see)
@@ -10,56 +10,36 @@ public/               the website (what visitors see)
   assets/styles.css
   assets/app.js       product list, popup, form logic  <- edit products here
   downloads/          put your free PDFs here
-functions/api/
+src/
+  worker.js           routes /api/* and serves the website
   subscribe.js        saves every signup into the database
   export.js           downloads your list as a CSV file
-schema.sql            creates the database table (run once)
+wrangler.jsonc        Worker settings, including the database connection (DB)
+schema.sql            database table (already created in your account)
 ```
 
 ## Video tutorials
 
 - How to connect GitHub to Cloudflare Pages (2026): https://www.youtube.com/watch?v=KlNPhoQQjmw
 - How to deploy a GitHub project on Cloudflare Pages (2026): https://www.youtube.com/watch?v=yIsqQqc--tI
-- Official docs, D1 bindings for Pages: https://developers.cloudflare.com/pages/functions/bindings/
+- Official docs, Workers static assets: https://developers.cloudflare.com/workers/static-assets/
 
-## One-time setup (about 15 minutes)
+## Setup status
 
-### 1. Put the code on GitHub
-1. Go to github.com > **New repository** > name it `a2z-ai-site` > Create.
-2. Click **uploading an existing file** and drag in everything from this folder (keep the folders).
-   Or let Claude push it for you once GitHub is connected.
+- Database `a2z-ai-subscribers`: created, table ready.
+- Database connection: already set in `wrangler.jsonc` (binding `DB`), no dashboard binding needed.
+- Worker: connected to this GitHub repo. Every push deploys automatically.
 
-### 2. Create the Cloudflare Pages project
-1. dash.cloudflare.com > **Workers & Pages** > **Create** > **Pages** > **Connect to Git**.
-2. Pick the `a2z-ai-site` repository.
-3. Build settings:
-   - Framework preset: **None**
-   - Build command: *(leave empty)*
-   - Build output directory: **public**
-4. **Save and Deploy**. Your site is live at `a2z-ai-site.pages.dev`.
+### The one step left: export password
+Worker > **Settings** > **Variables and Secrets** > **Add** > Type **Secret**, Name **EXPORT_KEY**,
+Value: a long password you keep private. Save and deploy.
 
-### 3. Create the database
-1. Cloudflare > **Storage & Databases** > **D1** > **Create database** > name it `a2z-ai-subscribers`.
-2. Open it > **Console** > paste everything from `schema.sql` > **Execute**.
-
-### 4. Connect the database to the site
-1. Workers & Pages > your project > **Settings** > **Bindings** > **Add** > **D1 database**.
-2. Variable name: **DB** (exactly this) > Database: `a2z-ai-subscribers` > Save.
-
-### 5. Add your export password
-1. Same project > **Settings** > **Variables and Secrets** > **Add**.
-2. Type: **Secret**, Name: **EXPORT_KEY**, Value: a long random password you keep private.
-
-### 6. Redeploy
-Project > **Deployments** > latest deployment > **...** > **Retry deployment**.
-(The database and secret only start working after a new deployment.)
-
-### 7. Test
-Open your site, sign up with your own email, then check step "See your emails" below.
+If the Worker in your dashboard has a different name than `a2z-ai-site`,
+change `"name"` in `wrangler.jsonc` to match, or the build will fail.
 
 ## See your emails
 
-- **Download CSV (all):** `https://YOUR-SITE.pages.dev/api/export?key=YOUR_EXPORT_KEY`
+- **Download CSV (all):** `https://YOUR-SITE.workers.dev/api/export?key=YOUR_EXPORT_KEY`
 - **Only early access:** add `&form=early-access`
 - **Only free downloads:** add `&form=free-download`
 - **Only hero newsletter form:** add `&form=newsletter`
@@ -81,8 +61,8 @@ Every change pushed to GitHub goes live automatically in about a minute.
   `[COMPANY ADDRESS]` in privacy.html.
 
 ## Custom domain
-Project > **Custom domains** > **Set up a custom domain** > follow the steps.
+Worker > **Settings** > **Domains & Routes** > **Add** > **Custom domain**.
 
 ## Free limits (enough for a long time)
 - D1 free: 100,000 signups written per day, 5 GB storage.
-- Pages free: unlimited static requests.
+- Workers free: 100,000 API requests per day; static pages are free.

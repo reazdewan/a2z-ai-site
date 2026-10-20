@@ -1,4 +1,4 @@
-// POST /api/subscribe
+// POST /api/subscribe (called from src/worker.js)
 // Saves a signup (newsletter, free download or early access) into the D1 database bound as `DB`.
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -15,7 +15,7 @@ function clean(value, max) {
   return String(value ?? '').replace(/[\u0000-\u001F\u007F]/g, '').trim().slice(0, max);
 }
 
-export async function onRequestPost({ request, env }) {
+export async function handleSubscribe(request, env) {
   let data;
   try {
     const type = request.headers.get('content-type') || '';

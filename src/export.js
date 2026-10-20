@@ -1,6 +1,6 @@
 // GET /api/export?key=YOUR_EXPORT_KEY            -> all signups as CSV
 // GET /api/export?key=YOUR_EXPORT_KEY&form=early-access   -> only one form
-// Protected by the secret EXPORT_KEY set in Cloudflare (Settings > Variables and Secrets).
+// Protected by the secret EXPORT_KEY set in Cloudflare (Worker > Settings > Variables and Secrets).
 
 const FORMS = new Set(['newsletter', 'free-download', 'early-access']);
 const COLUMNS = ['created_at', 'first_name', 'last_name', 'email', 'form', 'product', 'country', 'page'];
@@ -19,7 +19,7 @@ function csvCell(value) {
   return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
 }
 
-export async function onRequestGet({ request, env }) {
+export async function handleExport(request, env) {
   const url = new URL(request.url);
   const key = url.searchParams.get('key') || '';
 
