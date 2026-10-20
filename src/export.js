@@ -25,6 +25,8 @@ export async function handleExport(request, env) {
   const serverKey = typeof env.EXPORT_KEY === 'string' ? env.EXPORT_KEY.trim() : '';
 
   if (!serverKey || !safeEqual(key, serverKey)) {
+    // Slow down password guessing: every wrong attempt waits 2 seconds.
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     return new Response('Not found', { status: 404 });
   }
   if (!env.DB) return new Response('Database is not connected yet.', { status: 500 });
