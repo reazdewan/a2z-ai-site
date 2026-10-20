@@ -105,17 +105,17 @@ img{max-width:100%}
 /* Product cards */
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:26px}
 .card{display:flex;flex-direction:column;overflow:hidden}
-.card-media{height:280px;background:var(--cream);border-bottom:var(--bd);display:flex;align-items:center;justify-content:center;position:relative}
+.card-media{height:240px;background:var(--cream);border-bottom:var(--bd);display:flex;align-items:center;justify-content:center;position:relative}
 .card-media.peach{background:var(--accent-soft)}
 .card-media .sticker{position:absolute;top:14px;left:14px;z-index:1;font-size:12.5px;padding:4px 10px;transform:rotate(-4deg)}
-.card-body{padding:20px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;flex:1 1 auto}
-.card-body h3{font-size:21px;font-weight:900;line-height:1.1;letter-spacing:-0.02em}
-.card-body p{font-size:14.5px;color:var(--muted);font-weight:500;flex:1 1 auto}
-.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:8px;width:100%}
+.card-body{padding:18px 20px 20px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;flex:1 1 auto}
+.card-body h3{font-size:20px;font-weight:900;line-height:1.15;letter-spacing:-0.02em;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;min-height:2.3em}
+.card-body p{font-size:14.5px;line-height:1.5;color:var(--muted);font-weight:500;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;min-height:3em}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:6px;margin-top:auto;width:100%}
 .price-tag{font-weight:900;font-size:26px;letter-spacing:-0.03em}
 
 /* Book covers (pure CSS) */
-.book{width:164px;aspect-ratio:3/4;position:relative;overflow:hidden;border:var(--bd);border-radius:4px 12px 12px 4px;box-shadow:5px 6px 0 var(--ink),inset 8px 0 0 rgba(0,0,0,.18);padding:18px 14px 14px 22px;display:flex;flex-direction:column;gap:6px}
+.book{width:150px;aspect-ratio:3/4;position:relative;overflow:hidden;border:var(--bd);border-radius:4px 12px 12px 4px;box-shadow:5px 6px 0 var(--ink),inset 8px 0 0 rgba(0,0,0,.18);padding:18px 14px 14px 22px;display:flex;flex-direction:column;gap:6px}
 .book .ring{position:absolute;right:-34px;top:-34px;width:110px;height:110px;border-radius:999px;border:14px solid var(--b-accent)}
 .book .dot{position:absolute;right:-40px;bottom:-40px;width:130px;height:130px;border-radius:999px;background:var(--b-accent)}
 .book .bar{position:absolute;left:22px;bottom:34px;width:46px;height:5px;background:var(--b-accent)}
