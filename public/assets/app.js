@@ -7,10 +7,8 @@
   var FREE = [
     { id: 'f1', cat: 'Prompt pack', title: '1500+ AI Prompts', desc: 'Ready-to-use prompts for 20 work categories.', big: '1500+', coverTitle: 'AI Prompts', coverSub: 'Become a ChatGPT power user', bg: '#111111', ink: '#FFFFFF', accent: '#FF5A1F', download: '/downloads/1500-ai-prompts.pdf' },
     { id: 'f8', cat: 'Income guide', title: '150+ Ways to Make Money with AI', desc: 'Practical ways to earn with AI tools.', big: '150+', coverTitle: 'Ways to Make\nMoney with AI', coverSub: 'Daily income opportunities', bg: '#0F766E', ink: '#FFFFFF', accent: '#A7F3D0', download: '/downloads/150-ways-to-make-money-with-ai.pdf' },
-    { id: 'f3', cat: 'AI agents', title: 'ChatGPT AI Agents', desc: '22 marketing agents you can launch fast.', big: '22', coverTitle: 'ChatGPT\nAI Agents', coverSub: 'Marketing agents you can launch in 5 minutes', bg: '#2563EB', ink: '#FFFFFF', accent: '#FFD9C7', download: '/downloads/chatgpt-ai-agents.pdf' },
     { id: 'f4', cat: 'Prompt pack', title: 'The Claude Playbook for Marketers', desc: '150+ Claude prompts for marketing work.', big: '150+', coverTitle: 'Claude\nPlaybook', coverSub: 'Prompts for marketers', bg: '#FFD9C7', ink: '#111111', accent: '#FF5A1F', download: '/downloads/claude-playbook-for-marketers.pdf' },
     { id: 'f5', cat: 'Playbook', title: 'Agentic Engineering Playbook', desc: '29 lessons on building agentic systems.', big: '29', coverTitle: 'Agentic\nEngineering', coverSub: 'Lessons on Claude Code, subagents and MCP', bg: '#FACC15', ink: '#111111', accent: '#111111', download: '/downloads/agentic-engineering-playbook.pdf' },
-    { id: 'f6', cat: 'Cheat sheet', title: 'ChatGPT Cheat Sheet', desc: 'ChatGPT modes and 8 prompt frameworks.', big: '8', coverTitle: 'ChatGPT\nCheat Sheet', coverSub: 'Prompt frameworks, modes and tools', bg: '#FFFFFF', ink: '#111111', accent: '#FF5A1F', download: '/downloads/chatgpt-cheat-sheet.pdf' },
   ];
 
   var PAID = [
