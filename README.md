@@ -1,7 +1,7 @@
 # A2Z AI website
 
 Store home page for A2Z AI: free downloads, early access for premium products, and email collection.
-Hosting: **Cloudflare Workers** (free, deployed from GitHub). Emails are saved in **Cloudflare D1** (free database).
+Live at **https://shop.a2zaidaily.com**. Hosting: **Cloudflare Workers** (free, deployed from GitHub). Emails are saved in **Cloudflare D1** (free database).
 
 ```
 public/               the website (what visitors see)
@@ -39,7 +39,7 @@ change `"name"` in `wrangler.jsonc` to match, or the build will fail.
 
 ## See your emails
 
-- **Download CSV (all):** `https://YOUR-SITE.workers.dev/api/export?key=YOUR_EXPORT_KEY`
+- **Download CSV (all):** `https://shop.a2zaidaily.com/api/export?key=YOUR_EXPORT_KEY`
 - **Only early access:** add `&form=early-access`
 - **Only free downloads:** add `&form=free-download`
 - **Only hero newsletter form:** add `&form=newsletter`
@@ -61,7 +61,7 @@ Every change pushed to GitHub goes live automatically in about a minute.
   `[COMPANY ADDRESS]` in privacy.html.
 
 ## Custom domain
-Worker > **Settings** > **Domains & Routes** > **Add** > **Custom domain**.
+Connected: `shop.a2zaidaily.com`. To add more, Worker > **Domains** > **Add domain**.
 
 ## Free limits (enough for a long time)
 - D1 free: 100,000 signups written per day, 5 GB storage.
