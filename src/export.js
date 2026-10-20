@@ -21,9 +21,10 @@ function csvCell(value) {
 
 export async function handleExport(request, env) {
   const url = new URL(request.url);
-  const key = url.searchParams.get('key') || '';
+  const key = (url.searchParams.get('key') || '').trim();
+  const serverKey = typeof env.EXPORT_KEY === 'string' ? env.EXPORT_KEY.trim() : '';
 
-  if (!env.EXPORT_KEY || !safeEqual(key, env.EXPORT_KEY)) {
+  if (!serverKey || !safeEqual(key, serverKey)) {
     return new Response('Not found', { status: 404 });
   }
   if (!env.DB) return new Response('Database is not connected yet.', { status: 500 });

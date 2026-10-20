@@ -42,8 +42,12 @@ export async function handleImport(request, env) {
     return json({ ok: false, error: 'Invalid request' }, 400);
   }
 
-  if (!env.EXPORT_KEY || !safeEqual(String(body.key || ''), env.EXPORT_KEY)) {
-    return json({ ok: false, error: 'Wrong password' }, 401);
+  const serverKey = typeof env.EXPORT_KEY === 'string' ? env.EXPORT_KEY.trim() : '';
+  if (!serverKey) {
+    return json({ ok: false, error: 'EXPORT_KEY is not set on the live Worker. Add it as a Secret under Settings > Variables and Secrets (not the Build section), then deploy.' }, 401);
+  }
+  if (!safeEqual(String(body.key || '').trim(), serverKey)) {
+    return json({ ok: false, error: 'Wrong password (the server has an EXPORT_KEY, but it does not match what you typed)' }, 401);
   }
   if (!env.DB) return json({ ok: false, error: 'Database is not connected yet.' }, 500);
 
