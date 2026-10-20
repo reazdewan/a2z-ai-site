@@ -63,8 +63,8 @@ Every change pushed to GitHub goes live automatically in about a minute.
 - **Free download files:** add PDFs to `public/downloads/` using the names in that folder's text file,
   or replace each `download:` value with a Google Drive link.
 - **Text on the page:** `public/index.html`.
-- **Placeholders to fill:** `[YOUR REFUND POLICY]` in index.html, and `[DATE]`, `[SUPPORT EMAIL]`,
-  `[COMPANY ADDRESS]` in privacy.html.
+- **Placeholder to fill:** `[YOUR REFUND POLICY]` in index.html.
+- **Contact:** info@a2zaidaily.com, Dhaka, Bangladesh (privacy page).
 
 ## Custom domain
 Connected: `shop.a2zaidaily.com`. To add more, Worker > **Domains** > **Add domain**.
