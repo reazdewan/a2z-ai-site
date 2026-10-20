@@ -1,0 +1,15 @@
+Put your free product files in this folder with these exact names:
+
+1500-ai-prompts.pdf
+199-income-ideas.pdf
+chatgpt-ai-agents.pdf
+claude-playbook-for-marketers.pdf
+agentic-engineering-playbook.pdf
+chatgpt-cheat-sheet.pdf
+150-revenue-streams.pdf
+150-ways-to-make-money-with-ai.pdf
+
+Prefer Google Drive links instead? Open public/assets/app.js and replace
+each `download: '/downloads/...'` value with your full link.
+
+You can delete this text file once the PDFs are in place.
