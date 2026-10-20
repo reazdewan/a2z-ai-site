@@ -3,7 +3,7 @@
   'use strict';
 
   // ---------- Products ----------
-  // `download`: put your PDF in /downloads with this exact name, or replace with a full link (Google Drive etc).
+  // `download`: file name or link for each free product, for when the delivery email is set up.
   var FREE = [
     { id: 'f1', cat: 'Prompt pack', title: '1500+ AI Prompts', desc: 'The 1500+ prompt collection to become a ChatGPT power user, across 20 categories from marketing and sales to HR and engineering.', big: '1500+', coverTitle: 'AI Prompts', coverSub: 'Become a ChatGPT power user', bg: '#111111', ink: '#FFFFFF', accent: '#FF5A1F', download: '/downloads/1500-ai-prompts.pdf' },
     { id: 'f2', cat: 'Income guide', title: '199+ Income Ideas', desc: 'Side hustles and online business ideas you can start with AI, each with notes on how it makes money.', big: '199+', coverTitle: 'Income\nIdeas', coverSub: 'Start earning with AI tools', bg: '#FF5A1F', ink: '#111111', accent: '#FBF6EA', download: '/downloads/199-income-ideas.pdf' },
@@ -86,12 +86,6 @@
   FREE.forEach(function (p) { freeGrid.appendChild(card(p)); });
   PAID.forEach(function (p) { paidGrid.appendChild(card(p)); });
 
-  // Hero success links
-  document.querySelectorAll('[data-download]').forEach(function (a) {
-    var p = findProduct(a.getAttribute('data-download'));
-    if (p) a.href = p.download;
-  });
-
   // ---------- Modal ----------
   var modal = byId('modal');
   var mForm = byId('m-form');
@@ -114,8 +108,8 @@
     byId('m-title').textContent = p.title;
     byId('m-intro').textContent = premium
       ? 'This product is launching soon. Add your email and we will let you know the moment ' + p.title + ' launches. You will also get the free A2Z AI daily newsletter.'
-      : 'Tell us your name and email and your download opens right away. You will also get the free A2Z AI daily newsletter.';
-    byId('m-cta').textContent = premium ? 'Get early access' : 'Get my download';
+      : 'Tell us your name and email and we will send it to your inbox. You will also get the free A2Z AI daily newsletter.';
+    byId('m-cta').textContent = premium ? 'Get early access' : 'Send it to my inbox';
 
     mForm.setAttribute('data-form', premium ? 'early-access' : 'free-download');
     mForm.setAttribute('data-product', p.title);
@@ -147,12 +141,10 @@
     var premium = !!p.price;
     byId('m-done-title').textContent = premium
       ? 'You are on the list, ' + firstName + '.'
-      : 'Your download is ready, ' + firstName + '.';
+      : "You're in, " + firstName + '.';
     byId('m-done-text').textContent = premium
       ? 'We will email you as soon as ' + p.title + ' launches.'
-      : p.title + ' is ready. You are also subscribed to the A2Z AI daily newsletter.';
-    var dl = byId('m-download');
-    if (premium) { dl.hidden = true; } else { dl.hidden = false; dl.href = p.download; }
+      : 'Check your email inbox. ' + p.title + ' is on the way, along with the free A2Z AI daily newsletter.';
     mForm.hidden = true;
     mDone.hidden = false;
   }
