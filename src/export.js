@@ -1,9 +1,7 @@
-// GET /api/export?key=YOUR_EXPORT_KEY            -> all signups as CSV
-// GET /api/export?key=YOUR_EXPORT_KEY&form=early-access   -> only one form
+// GET /api/export?key=YOUR_EXPORT_KEY  -> all subscribers as CSV, newest first
 // Protected by the secret EXPORT_KEY set in Cloudflare (Worker > Settings > Variables and Secrets).
 
-const FORMS = new Set(['newsletter', 'free-download', 'early-access']);
-const COLUMNS = ['created_at', 'first_name', 'last_name', 'email', 'form', 'product', 'country', 'page'];
+const COLUMNS = ['created_at', 'first_name', 'last_name', 'email', 'user_agent'];
 
 function safeEqual(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) return false;
@@ -31,10 +29,7 @@ export async function handleExport(request, env) {
   }
   if (!env.DB) return new Response('Database is not connected yet.', { status: 500 });
 
-  const form = url.searchParams.get('form');
-  const stmt = FORMS.has(form)
-    ? env.DB.prepare(`SELECT ${COLUMNS.join(', ')} FROM subscribers WHERE form = ?1 ORDER BY created_at DESC`).bind(form)
-    : env.DB.prepare(`SELECT ${COLUMNS.join(', ')} FROM subscribers ORDER BY created_at DESC`);
+  const stmt = env.DB.prepare(`SELECT ${COLUMNS.join(', ')} FROM subscribers ORDER BY created_at DESC`);
 
   const { results } = await stmt.all();
   const lines = [COLUMNS.join(',')].concat(
@@ -45,7 +40,7 @@ export async function handleExport(request, env) {
   return new Response(lines.join('\n') + '\n', {
     headers: {
       'content-type': 'text/csv; charset=utf-8',
-      'content-disposition': `attachment; filename="a2z-ai-subscribers-${form || 'all'}-${date}.csv"`,
+      'content-disposition': `attachment; filename="a2z-ai-subscribers-${date}.csv"`,
       'cache-control': 'no-store'
     }
   });

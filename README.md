@@ -39,14 +39,11 @@ change `"name"` in `wrangler.jsonc` to match, or the build will fail.
 
 ## See your emails
 
-- **Download CSV (all):** `https://shop.a2zaidaily.com/api/export?key=YOUR_EXPORT_KEY`
-- **Only early access:** add `&form=early-access`
-- **Only free downloads:** add `&form=free-download`
-- **Only hero newsletter form:** add `&form=newsletter`
+- **Download CSV:** `https://shop.a2zaidaily.com/api/export?key=YOUR_EXPORT_KEY` (newest first)
 - Or in Cloudflare: D1 > `a2z-ai-subscribers` > Console:
   `SELECT * FROM subscribers ORDER BY created_at DESC;`
 
-Columns: date, first name, last name, email, form, product, country, page.
+Columns: date, first name, last name, email, user agent.
 
 ## Import an existing list
 
